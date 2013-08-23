@@ -24,6 +24,7 @@
 package org.openrtk.idl.epprtk.domain;
 
 
+
 /**
  * Class that contains the elements to be added into or removed from the domain
  * object in the registry.</p>
@@ -43,6 +44,12 @@ public class epp_DomainUpdateAddRemove implements org.omg.CORBA.portable.IDLEnti
    * @see #getNameServers()
    */
   public String m_name_servers[] = null;
+  /**
+   * The array of host attributes to be associated with or removed from the domain object.
+   * @see #setHostAttributes(epp_DomainHostAttr[])
+   * @see #getHostAttributes()
+   */
+  public epp_DomainHostAttr[] m_host_attr = null;
   /**
    * The array of contact objects to be associated with or removed from the domain object.
    * Contact objects must exist in the registry
@@ -83,6 +90,7 @@ public class epp_DomainUpdateAddRemove implements org.omg.CORBA.portable.IDLEnti
    * @see #m_name_servers
    */
   public void setNameServers(String[] value) { m_name_servers = value; }
+
   /**
    * Accessor method for the array of domain name servers
    * @return The array of domain name servers
@@ -90,6 +98,25 @@ public class epp_DomainUpdateAddRemove implements org.omg.CORBA.portable.IDLEnti
    */
   public String[] getNameServers() { return m_name_servers; }
 
+  
+  /**
+   * Accessor method for the array of domain host attributes
+   * @param value The array of domain host attributes
+   * @see #m_host_attr
+   */
+  public void setHostAttributes(epp_DomainHostAttr[] value) {
+    this.m_host_attr = value;
+  }
+  
+  /**
+   * Accessor method for the array of domain host attributes
+   * @return The array of domain host attributes
+   * @see #m_host_attr
+   */
+  public epp_DomainHostAttr[] getHostAttributes() {
+    return m_host_attr;
+  }
+  
   /**
    * Accessor method for the array of domain contact objects
    * @param value The array of domain contacts

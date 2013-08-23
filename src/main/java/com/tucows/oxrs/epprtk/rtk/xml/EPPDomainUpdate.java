@@ -36,6 +36,7 @@ import java.text.*;
 import com.tucows.oxrs.epprtk.rtk.*;
 import org.openrtk.idl.epprtk.*;
 import org.openrtk.idl.epprtk.domain.*;
+import org.openrtk.idl.epprtk.host.epp_HostAddress;
 
 import org.w3c.dom.*;
 import org.w3c.dom.traversal.*;
@@ -213,6 +214,17 @@ public class EPPDomainUpdate extends EPPDomainBase implements epp_DomainUpdate
                 add_remove_element.appendChild(createNameServerElement(doc, server_list));
             }
 
+            epp_DomainHostAttr[] a_host_attr = add_remove_items.m_host_attr;
+
+            if (a_host_attr != null && a_host_attr.length > 0) {
+              if (add_remove_element == null) {
+                add_remove_element = doc.createElement(tag_name);
+              }
+
+              List server_list = Arrays.asList(a_host_attr);
+              add_remove_element.appendChild(createHostAttrElement(doc, server_list));
+            }
+            
             if ( add_remove_items.m_contacts != null &&
                  add_remove_items.m_contacts.length > 0 )
             {
@@ -304,5 +316,29 @@ public class EPPDomainUpdate extends EPPDomainBase implements epp_DomainUpdate
         }
 
     }
-    
+
+    protected Element createHostAttrElement(Document doc, List hostAttr)
+    {
+        Element nameServerElement = doc.createElement("domain:ns");
+        for ( Iterator it = hostAttr.iterator(); it.hasNext(); )
+        {
+            Element eAttr = doc.createElement("domain:hostAttr");
+            epp_DomainHostAttr hAttr = (epp_DomainHostAttr) it.next();
+            String server_name = hAttr.getName();
+            addXMLElement(doc, eAttr, "domain:hostName", server_name);
+            epp_HostAddress[] aHIP = hAttr.getAddresses();
+            if ( aHIP != null && aHIP.length > 0 )
+            {
+                List lHIP = Arrays.asList(aHIP);
+                for ( Iterator it1 = lHIP.iterator(); it1.hasNext(); )
+                {
+                    epp_HostAddress iHIP = (epp_HostAddress) it1.next();
+                    Element eHIP = addXMLElement(doc, eAttr, "domain:hostAddr", iHIP.getIp());
+                    eHIP.setAttribute("ip", iHIP.getType().toString());
+                }
+            }
+            nameServerElement.appendChild(eAttr);
+        }
+        return nameServerElement;
+    }
 }

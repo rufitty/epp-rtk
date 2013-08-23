@@ -24,6 +24,7 @@
 package org.openrtk.idl.epprtk.domain;
 
 
+
 /**
  * Class that contains the elements used to represent the domain info
  * response from the EPP server.</p>
@@ -78,6 +79,12 @@ public class epp_DomainInfoRsp implements org.omg.CORBA.portable.IDLEntity
    * @see #getNameServers()
    */
   public String m_name_servers[] = null;
+  /**
+   * The array of host attributes associated with the domain object.
+   * @see #setHostAttrs(epp_DomainHostAttr[])
+   * @see #getHostAttrs()
+   */
+  public epp_DomainHostAttr[] m_host_attrs = null;
   /**
    * The array of host objects created under this domain object.
    * @see #setHosts(String[])
@@ -269,6 +276,23 @@ public class epp_DomainInfoRsp implements org.omg.CORBA.portable.IDLEntity
    * @see #m_name_servers
    */
   public String[] getNameServers() { return m_name_servers; }
+
+  /**
+   * Accessor method for the array of name servers associated with the domain object
+   * @return The array of domain name servers
+   * @see #m_name_servers
+   */
+  public epp_DomainHostAttr[] getHostAttrs() {
+    return m_host_attrs;
+  }
+  /**
+   * Accessor method for the array of name servers associated with the domain object
+   * @param m_host_attrs The array of domain name servers
+   * @see #m_host_attrs
+   */
+  public void setHostAttrs(epp_DomainHostAttr[] m_host_attrs) {
+    this.m_host_attrs = m_host_attrs;
+  }
 
   /**
    * Accessor method for the array of host objects created under this domain object

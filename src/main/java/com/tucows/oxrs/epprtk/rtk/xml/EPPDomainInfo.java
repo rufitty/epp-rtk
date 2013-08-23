@@ -36,6 +36,8 @@ import java.text.*;
 import com.tucows.oxrs.epprtk.rtk.*;
 import org.openrtk.idl.epprtk.*;
 import org.openrtk.idl.epprtk.domain.*;
+import org.openrtk.idl.epprtk.host.epp_HostAddress;
+import org.openrtk.idl.epprtk.host.epp_HostAddressType;
 
 import org.w3c.dom.*;
 import org.w3c.dom.traversal.*;
@@ -114,12 +116,6 @@ public class EPPDomainInfo extends EPPDomainBase implements epp_DomainInfo
             throw new epp_XMLException("missing request data or domain name");
         }
 
-        if ( action_request_.m_hosts_type == null )
-        {
-            debug(DEBUG_LEVEL_TWO,method_name,"hosts type is null, so assuming ALL");
-            action_request_.m_hosts_type = epp_DomainHostsType.ALL;
-        }
-
         Document doc = new DocumentImpl();
         Element root = createDocRoot(doc);
 
@@ -132,8 +128,12 @@ public class EPPDomainInfo extends EPPDomainBase implements epp_DomainInfo
         setCommonAttributes(domain_info);
 
         Element domain_name = addXMLElement(doc, domain_info, "domain:name", action_request_.m_name);
-        domain_name.setAttribute("hosts", action_request_.m_hosts_type.toString());
 
+        //if registry does not support hostObj, then do not specify hosts type
+        if( action_request_.m_hosts_type != null )
+        {
+            domain_name.setAttribute("hosts", action_request_.m_hosts_type.toString());
+        }
 		if (action_request_.m_auth_info != null) 
 		{
 			domain_info.appendChild( prepareAuthInfo( doc, "domain", action_request_.m_auth_info ) ); 
@@ -218,6 +218,7 @@ public class EPPDomainInfo extends EPPDomainBase implements epp_DomainInfo
             List contacts = (List)new ArrayList();
             List name_servers = (List)new ArrayList();
             List hosts = (List)new ArrayList();
+            List<epp_DomainHostAttr> hostAttrList = new ArrayList<epp_DomainHostAttr>();
 
             for (int count = 0; count < domain_info_result_list.getLength(); count++)
             {
@@ -272,9 +273,38 @@ public class EPPDomainInfo extends EPPDomainBase implements epp_DomainInfo
                     for (int i = 0; i < hostObjectsNodes.getLength(); i++)
                     {
                         Node hostObject = hostObjectsNodes.item(i);
-                        if (!hostObject.getNodeName().equals("domain:hostObj"))
-                            throw new epp_XMLException("not supporting " + hostObject.getNodeName() + " in domain:ns results");
-                        name_servers.add(hostObject.getFirstChild().getNodeValue());
+                        if ( hostObject.getNodeName().equals("domain:hostObj") ) 
+                        {
+                            name_servers.add(hostObject.getFirstChild().getNodeValue());
+                        } else if ( hostObject.getNodeName().equals("domain:hostAttr") )
+                        {
+                            String name = null;
+                            List<epp_HostAddress> hostAddressList = new LinkedList<epp_HostAddress>();
+                            NodeList hostAttrNodeList = hostObject.getChildNodes();
+                            for ( int iHA = 0; iHA < hostAttrNodeList.getLength(); iHA++ )
+                            {
+                                Node hostAttrNode = hostAttrNodeList.item(iHA);
+                                String hostAttrNodeName = hostAttrNode.getNodeName();
+
+                                if ( hostAttrNodeName.equals("domain:hostName") )
+                                {
+                                    name = hostAttrNode.getFirstChild().getNodeValue();
+                                } else if ( hostAttrNodeName.equals("domain:hostAddr") )
+                                {
+                                    String ip = hostAttrNode.getFirstChild().getNodeValue();
+                                    Node type = hostAttrNode.getAttributes().getNamedItem("ip");
+                                    String typeString = (type == null) ? "v4" : type.getNodeValue();
+
+                                    hostAddressList.add(new epp_HostAddress("v6".equals(typeString) ? epp_HostAddressType.IPV6 : epp_HostAddressType.IPV4, ip));
+                                } else
+                                {
+                                    throw new epp_XMLException("not supporting " + hostObject.getNodeName() + " in domain:hostAttr results");
+                                }
+                            }
+                            hostAttrList.add(new epp_DomainHostAttr(name, hostAddressList.toArray(new epp_HostAddress[0])));
+                        } else {
+                          throw new epp_XMLException("not supporting " + hostObject.getNodeName() + " in domain:ns results");
+                        }
                     }
                 }
                 if ( a_node.getNodeName().equals("domain:host") ) { hosts.add(a_node.getFirstChild().getNodeValue()); }
@@ -304,6 +334,7 @@ public class EPPDomainInfo extends EPPDomainBase implements epp_DomainInfo
             }
 
             if ( name_servers.size() > 0 ) { action_response_.m_name_servers = convertListToStringArray(name_servers); }
+            if ( hostAttrList.size() > 0 ) { action_response_.m_host_attrs   = hostAttrList.toArray(new epp_DomainHostAttr[0]); }
             if ( hosts.size()        > 0 ) { action_response_.m_hosts        = convertListToStringArray(hosts); }
 
             if ( contacts.size() > 0 ) { action_response_.m_contacts = (epp_DomainContact[]) convertListToArray((new epp_DomainContact()).getClass(), contacts); }
