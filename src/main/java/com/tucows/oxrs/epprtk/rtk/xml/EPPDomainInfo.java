@@ -231,7 +231,7 @@ public class EPPDomainInfo extends EPPDomainBase implements epp_DomainInfo
                 if ( a_node.getNodeName().equals("domain:contact") )
                 {
                     epp_DomainContact domain_contact = new epp_DomainContact();
-                    domain_contact.m_id = a_node.getFirstChild().getNodeValue();
+                    domain_contact.m_id = a_node.getTextContent();
                     domain_contact.m_type = (epp_DomainContactType)contact_type_hash_.get( ((Element)a_node).getAttribute("type") );
                     contacts.add(domain_contact);
                 }
