@@ -816,7 +816,7 @@ public abstract class EPPXMLBase extends RTKBase
     {
         String method_name = "prepareExtensionElement()";
         debug(DEBUG_LEVEL_THREE,method_name,"Entered");
-        if ( extensions != null )
+        if ( extensions != null && extensions.length > 0 )
         {
             Element extension_element = doc.createElement("extension");
             for ( int count = 0; count < extensions.length; count++ )
