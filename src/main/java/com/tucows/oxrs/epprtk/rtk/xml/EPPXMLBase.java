@@ -714,7 +714,8 @@ public abstract class EPPXMLBase extends RTKBase
 		    the_node.getNodeName().endsWith(":id"))
 		{
 		    chk_result.m_value = the_node.getFirstChild().getNodeValue();
-		    chk_result.m_avail = ((Element)the_node).getAttribute("avail").equals("1") ? true : false;
+		    String availValue = ((Element)the_node).getAttribute("avail");
+		    chk_result.m_avail = (availValue.equals("1") || availValue.equals("true")) ? true : false;
 		}
 		if (the_node.getNodeName().endsWith(":reason"))
 		{
