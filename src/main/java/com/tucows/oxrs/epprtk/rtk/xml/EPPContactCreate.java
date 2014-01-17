@@ -186,6 +186,18 @@ public class EPPContactCreate extends EPPContactBase implements epp_ContactCreat
         }
 
         contact_create.appendChild( prepareAuthInfo( doc, "contact", action_request_.m_auth_info ) );
+
+        if ( action_request_.m_disclose != null ) {
+            Element element = addXMLElement(doc, contact_create, "contact:disclose", "");
+            element.setAttribute("flag", action_request_.m_disclose.getFlag() ? "1" : "0");
+            List<epp_ContactDiscloseType> discloseList = Arrays.asList(action_request_.m_disclose.getTypeList()); 
+            for(epp_ContactDiscloseType type: epp_ContactDiscloseType.values()) {
+                if(discloseList.contains(type)) {
+                    Element typeElem = addXMLElement(doc, element, "contact:" + type.getName(), "");
+                    if ( type.getType() != null ) { typeElem.setAttribute("type", type.getType()); }
+                }
+            }
+        }
         
         create.appendChild( contact_create );
         

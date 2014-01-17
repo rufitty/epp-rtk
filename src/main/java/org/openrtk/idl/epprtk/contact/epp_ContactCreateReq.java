@@ -103,6 +103,13 @@ public class epp_ContactCreateReq implements org.omg.CORBA.portable.IDLEntity
   public org.openrtk.idl.epprtk.epp_AuthInfo m_auth_info = null;
 
   /**
+   * 
+   * @see #setDisclose(org.openrtk.idl.epprtk.contact.epp_ContactDisclose)
+   * @see #getDisclose()
+   */
+  public org.openrtk.idl.epprtk.contact.epp_ContactDisclose m_disclose = null;
+
+  /**
    * Empty constructor
    */
   public epp_ContactCreateReq ()
@@ -305,5 +312,19 @@ public class epp_ContactCreateReq implements org.omg.CORBA.portable.IDLEntity
     else
       return this.getClass().getName() + ": { m_cmd ["+m_cmd+"] m_id ["+m_id+"] m_addresses ["+(m_addresses != null ? java.util.Arrays.asList(m_addresses) : null)+"] m_voice ["+m_voice+"] m_fax ["+m_fax+"] m_email ["+m_email+"] m_auth_info ["+m_auth_info+"] }";
   }
+  
+
+  /**
+   * Accessor method for the disclose
+   * @param value The disclose
+   * @see #m_email
+   */
+  public void setDisclose(epp_ContactDisclose value) { m_disclose = value; }
+  /**
+   * Accessor method for the disclose
+   * @return The contact's disclose
+   * @see #m_email
+   */
+  public epp_ContactDisclose getDisclose() { return m_disclose; }
 
 } // class epp_ContactCreateReq
