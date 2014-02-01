@@ -157,7 +157,7 @@ public class EPPTransportTCP extends EPPTransportBase
 	    debug(DEBUG_LEVEL_THREE,method_name, "Read: ["+len+"] so far");
             epp_Result[] result = new epp_Result[1];
             result[0] = new epp_Result();
-            result[0].m_code = epp_Session.RTK_COMMUNICATIONS_FAILURE;
+            result[0].m_code = getErrorCode(xcp);
             result[0].m_msg = "Failed to read from server ["+xcp.getClass().toString()+"] ["+xcp.getMessage()+"]";
             throw new epp_Exception( result );
             
@@ -181,7 +181,7 @@ public class EPPTransportTCP extends EPPTransportBase
 	    debug(DEBUG_LEVEL_THREE,method_name, "Read: ["+s+"] so far");
             epp_Result[] result = new epp_Result[1];
             result[0] = new epp_Result();
-            result[0].m_code = epp_Session.RTK_COMMUNICATIONS_FAILURE;
+            result[0].m_code = getErrorCode(xcp);
             result[0].m_msg = "Failed to read from server ["+xcp.getClass().toString()+"] ["+xcp.getMessage()+"]";
             throw new epp_Exception( result );
             
@@ -200,14 +200,14 @@ public class EPPTransportTCP extends EPPTransportBase
                 debug(DEBUG_LEVEL_ONE,method_name,xcp);
                 epp_Result[] result = new epp_Result[1];
                 result[0] = new epp_Result();
-                result[0].m_code = epp_Session.RTK_COMMUNICATIONS_FAILURE;
+                result[0].m_code = getErrorCode(xcp);
                 result[0].m_msg = "Failed to read from server ["+xcp.getClass().toString()+"] ["+xcp.getMessage()+"]";
                 throw new epp_Exception( result );
             }
 
             epp_Result[] result = new epp_Result[1];
             result[0] = new epp_Result();
-            result[0].m_code = epp_Session.RTK_UNEXPECTED_SERVER_DISCONNECT;
+            result[0].m_code = epp_Session.RTK_COMMUNICATIONS_FAILURE;
             result[0].m_msg = "Unexpected server disconnect";
             throw new epp_Exception( result );
         }
@@ -248,6 +248,7 @@ public class EPPTransportTCP extends EPPTransportBase
 
             String final_xml = buf.toString();
             byte[] bytebuff = final_xml.getBytes("utf-8");
+            
             int len = bytebuff.length;
             writeBufferSize(writer_to_server_, len + INT_SZ);
             writer_to_server_.write(bytebuff, 0, len);
@@ -258,7 +259,7 @@ public class EPPTransportTCP extends EPPTransportBase
             debug(DEBUG_LEVEL_ONE,method_name,xcp);
             epp_Result[] result = new epp_Result[1];
             result[0] = new epp_Result();
-            result[0].m_code = epp_Session.RTK_COMMUNICATIONS_FAILURE;
+            result[0].m_code = getErrorCode(xcp);
             result[0].m_msg = "Failed to write to server ["+xcp.getClass().toString()+"] ["+xcp.getMessage()+"]";
             throw new epp_Exception( result );
         }
@@ -320,7 +321,7 @@ public class EPPTransportTCP extends EPPTransportBase
             }
             catch(IOException xcp)
             {
-                if (xcp instanceof InterruptedIOException)
+                if (xcp instanceof InterruptedIOException || xcp instanceof SocketException)
                     throw xcp;
                 debug(DEBUG_LEVEL_ONE,method_name,xcp);
                 return -1;
@@ -393,5 +394,13 @@ public class EPPTransportTCP extends EPPTransportBase
         out_buf[3] = (byte)(0xff & buf_sz);
 
         out.write(out_buf,0,INT_SZ);
+    }
+    
+    protected short getErrorCode(Exception xcp) {
+      if(xcp instanceof SocketException) {
+        return epp_Session.RTK_UNEXPECTED_SERVER_DISCONNECT;
+      } else {
+        return epp_Session.RTK_COMMUNICATIONS_FAILURE;
+      }
     }
 }
