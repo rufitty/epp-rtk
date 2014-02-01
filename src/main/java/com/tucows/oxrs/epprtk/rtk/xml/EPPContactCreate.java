@@ -269,7 +269,7 @@ public class EPPContactCreate extends EPPContactBase implements epp_ContactCreat
                 throw new epp_XMLException("response is missing the resData element");
             }
 
-            NodeList contact_create_data_list = response_data_element.getElementsByTagName("contact:creData").item(0).getChildNodes();
+            NodeList contact_create_data_list = response_data_element.getElementsByTagNameNS("urn:ietf:params:xml:ns:contact-1.0", "creData").item(0).getChildNodes();
 
             debug(DEBUG_LEVEL_TWO,method_name,"contact:creData's node count ["+contact_create_data_list.getLength()+"]");
 
@@ -283,8 +283,8 @@ public class EPPContactCreate extends EPPContactBase implements epp_ContactCreat
             {
                 Node a_node = contact_create_data_list.item(count);
 
-                if ( a_node.getNodeName().equals("contact:id") ) { action_response_.m_id = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("contact:crDate") ) { action_response_.m_creation_date = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("id") ) { action_response_.m_id = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("crDate") ) { action_response_.m_creation_date = a_node.getFirstChild().getNodeValue(); }
 
             }
         }

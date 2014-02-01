@@ -223,7 +223,7 @@ public class EPPDomainTransfer extends EPPDomainBase implements epp_DomainTransf
 
             Element response_data_element = getElement(response_node.getChildNodes(), "resData");
 
-            NodeList domain_transfer_data_list = response_data_element.getElementsByTagName("domain:trnData").item(0).getChildNodes();
+            NodeList domain_transfer_data_list = response_data_element.getElementsByTagNameNS("urn:ietf:params:xml:ns:domain-1.0", "trnData").item(0).getChildNodes();
 
             debug(DEBUG_LEVEL_TWO,method_name,"domain:trnData's node count ["+domain_transfer_data_list.getLength()+"]");
 

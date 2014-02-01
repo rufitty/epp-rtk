@@ -205,12 +205,12 @@ public abstract class EPPContactBase extends EPPXMLBase
         {
             Node a_node = transfer_data_list.item(count);
 
-            if ( a_node.getNodeName().equals("contact:id") ) { trn_data.m_id = a_node.getFirstChild().getNodeValue(); }
+            if ( a_node.getLocalName().equals("id") ) { trn_data.m_id = a_node.getFirstChild().getNodeValue(); }
 
-            if ( a_node.getNodeName().equals("contact:reID") ) { trn_data.m_request_client_id = a_node.getFirstChild().getNodeValue(); }
-            if ( a_node.getNodeName().equals("contact:acID") ) { trn_data.m_action_client_id = a_node.getFirstChild().getNodeValue(); }
+            if ( a_node.getLocalName().equals("reID") ) { trn_data.m_request_client_id = a_node.getFirstChild().getNodeValue(); }
+            if ( a_node.getLocalName().equals("acID") ) { trn_data.m_action_client_id = a_node.getFirstChild().getNodeValue(); }
 
-            if ( a_node.getNodeName().equals("contact:trStatus") )
+            if ( a_node.getLocalName().equals("trStatus") )
             {
                 String status_value = a_node.getFirstChild().getNodeValue();
                 if ( ! transfer_status_to_type_hash_.containsKey(status_value) )
@@ -224,8 +224,8 @@ public abstract class EPPContactBase extends EPPXMLBase
 
             }
 
-            if ( a_node.getNodeName().equals("contact:reDate") ) { trn_data.m_request_date = a_node.getFirstChild().getNodeValue(); }
-            if ( a_node.getNodeName().equals("contact:acDate") ) { trn_data.m_action_date = a_node.getFirstChild().getNodeValue(); }
+            if ( a_node.getLocalName().equals("reDate") ) { trn_data.m_request_date = a_node.getFirstChild().getNodeValue(); }
+            if ( a_node.getLocalName().equals("acDate") ) { trn_data.m_action_date = a_node.getFirstChild().getNodeValue(); }
 
         }
 

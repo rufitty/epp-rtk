@@ -235,7 +235,7 @@ public class EPPDomainCreate extends EPPDomainBase implements epp_DomainCreate
                 throw new epp_XMLException("response is missing the resData element");
             }
 
-            NodeList domain_create_data_list = response_data_element.getElementsByTagName("domain:creData").item(0).getChildNodes();
+            NodeList domain_create_data_list = response_data_element.getElementsByTagNameNS("urn:ietf:params:xml:ns:domain-1.0", "creData").item(0).getChildNodes();
 
             debug(DEBUG_LEVEL_TWO,method_name,"domain:creData's node count ["+domain_create_data_list.getLength()+"]");
 
@@ -249,9 +249,9 @@ public class EPPDomainCreate extends EPPDomainBase implements epp_DomainCreate
             {
                 Node a_node = domain_create_data_list.item(count);
 
-                if ( a_node.getNodeName().equals("domain:name") ) { action_response_.m_name = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("domain:crDate") ) { action_response_.m_creation_date = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("domain:exDate") ) { action_response_.m_expiration_date = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("name") ) { action_response_.m_name = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("crDate") ) { action_response_.m_creation_date = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("exDate") ) { action_response_.m_expiration_date = a_node.getFirstChild().getNodeValue(); }
 
             }
         }

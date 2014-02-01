@@ -205,7 +205,7 @@ public class EPPDomainInfo extends EPPDomainBase implements epp_DomainInfo
 
             Element response_data_element = getElement(response_node.getChildNodes(), "resData");
 
-            NodeList domain_info_result_list = response_data_element.getElementsByTagName("domain:infData").item(0).getChildNodes();
+            NodeList domain_info_result_list = response_data_element.getElementsByTagNameNS("urn:ietf:params:xml:ns:domain-1.0", "infData").item(0).getChildNodes();
 
             debug(DEBUG_LEVEL_TWO,method_name,"domain:infData's node count ["+domain_info_result_list.getLength()+"]");
 
@@ -224,11 +224,11 @@ public class EPPDomainInfo extends EPPDomainBase implements epp_DomainInfo
             {
                 Node a_node = domain_info_result_list.item(count);
 
-                if ( a_node.getNodeName().equals("domain:name") ) { action_response_.m_name = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("domain:roid") ) { action_response_.m_roid = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("name") ) { action_response_.m_name = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("roid") ) { action_response_.m_roid = a_node.getFirstChild().getNodeValue(); }
 
-                if ( a_node.getNodeName().equals("domain:registrant") ) { action_response_.m_registrant = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("domain:contact") )
+                if ( a_node.getLocalName().equals("registrant") ) { action_response_.m_registrant = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("contact") )
                 {
                     epp_DomainContact domain_contact = new epp_DomainContact();
                     domain_contact.m_id = a_node.getTextContent();
@@ -236,7 +236,7 @@ public class EPPDomainInfo extends EPPDomainBase implements epp_DomainInfo
                     contacts.add(domain_contact);
                 }
 
-                if ( a_node.getNodeName().equals("domain:status") )
+                if ( a_node.getLocalName().equals("status") )
                 {
                     epp_DomainStatus status = new epp_DomainStatus();
                     Node status_value_node = a_node.getFirstChild();
@@ -262,7 +262,7 @@ public class EPPDomainInfo extends EPPDomainBase implements epp_DomainInfo
                     statuses.add(status);
                 }
 
-                if ( a_node.getNodeName().equals("domain:ns") ) 
+                if ( a_node.getLocalName().equals("ns") ) 
                 { 
                     NodeList hostObjectsNodes = a_node.getChildNodes();
                     if ( hostObjectsNodes.getLength() == 0 )
@@ -273,10 +273,10 @@ public class EPPDomainInfo extends EPPDomainBase implements epp_DomainInfo
                     for (int i = 0; i < hostObjectsNodes.getLength(); i++)
                     {
                         Node hostObject = hostObjectsNodes.item(i);
-                        if ( hostObject.getNodeName().equals("domain:hostObj") ) 
+                        if ( hostObject.getLocalName().equals("hostObj") ) 
                         {
                             name_servers.add(hostObject.getFirstChild().getNodeValue());
-                        } else if ( hostObject.getNodeName().equals("domain:hostAttr") )
+                        } else if ( hostObject.getLocalName().equals("hostAttr") )
                         {
                             String name = null;
                             List<epp_HostAddress> hostAddressList = new LinkedList<epp_HostAddress>();
@@ -284,12 +284,12 @@ public class EPPDomainInfo extends EPPDomainBase implements epp_DomainInfo
                             for ( int iHA = 0; iHA < hostAttrNodeList.getLength(); iHA++ )
                             {
                                 Node hostAttrNode = hostAttrNodeList.item(iHA);
-                                String hostAttrNodeName = hostAttrNode.getNodeName();
+                                String hostAttrNodeName = hostAttrNode.getLocalName();
 
-                                if ( hostAttrNodeName.equals("domain:hostName") )
+                                if ( hostAttrNodeName.equals("hostName") )
                                 {
                                     name = hostAttrNode.getFirstChild().getNodeValue();
-                                } else if ( hostAttrNodeName.equals("domain:hostAddr") )
+                                } else if ( hostAttrNodeName.equals("hostAddr") )
                                 {
                                     String ip = hostAttrNode.getFirstChild().getNodeValue();
                                     Node type = hostAttrNode.getAttributes().getNamedItem("ip");
@@ -307,19 +307,19 @@ public class EPPDomainInfo extends EPPDomainBase implements epp_DomainInfo
                         }
                     }
                 }
-                if ( a_node.getNodeName().equals("domain:host") ) { hosts.add(a_node.getFirstChild().getNodeValue()); }
+                if ( a_node.getLocalName().equals("host") ) { hosts.add(a_node.getFirstChild().getNodeValue()); }
 
-                if ( a_node.getNodeName().equals("domain:clID") ) { action_response_.m_client_id = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("clID") ) { action_response_.m_client_id = a_node.getFirstChild().getNodeValue(); }
 
-                if ( a_node.getNodeName().equals("domain:crID") ) { action_response_.m_created_by = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("domain:crDate") ) { action_response_.m_created_date = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("domain:upID") ) { action_response_.m_updated_by = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("domain:upDate") ) { action_response_.m_updated_date = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("crID") ) { action_response_.m_created_by = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("crDate") ) { action_response_.m_created_date = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("upID") ) { action_response_.m_updated_by = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("upDate") ) { action_response_.m_updated_date = a_node.getFirstChild().getNodeValue(); }
 
-                if ( a_node.getNodeName().equals("domain:trDate") ) { action_response_.m_transfer_date = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("domain:exDate") ) { action_response_.m_expiration_date = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("trDate") ) { action_response_.m_transfer_date = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("exDate") ) { action_response_.m_expiration_date = a_node.getFirstChild().getNodeValue(); }
 
-                if ( a_node.getNodeName().equals("domain:authInfo") )
+                if ( a_node.getLocalName().equals("authInfo") )
                 {
                     action_response_.m_auth_info = new epp_AuthInfo();
                     Node auth_info_child = a_node.getFirstChild();

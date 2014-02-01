@@ -174,12 +174,12 @@ public abstract class EPPDomainBase extends EPPXMLBase
         {
             Node a_node = transfer_data_list.item(count);
 
-            if ( a_node.getNodeName().equals("domain:name") ) { trn_data.m_name = a_node.getFirstChild().getNodeValue(); }
+            if ( a_node.getLocalName().equals("name") ) { trn_data.m_name = a_node.getFirstChild().getNodeValue(); }
 
-            if ( a_node.getNodeName().equals("domain:reID") ) { trn_data.m_request_client_id = a_node.getFirstChild().getNodeValue(); }
-            if ( a_node.getNodeName().equals("domain:acID") ) { trn_data.m_action_client_id = a_node.getFirstChild().getNodeValue(); }
+            if ( a_node.getLocalName().equals("reID") ) { trn_data.m_request_client_id = a_node.getFirstChild().getNodeValue(); }
+            if ( a_node.getLocalName().equals("acID") ) { trn_data.m_action_client_id = a_node.getFirstChild().getNodeValue(); }
 
-            if ( a_node.getNodeName().equals("domain:trStatus") )
+            if ( a_node.getLocalName().equals("trStatus") )
             {
                 String status_value = a_node.getFirstChild().getNodeValue();
                 if ( ! transfer_status_to_type_hash_.containsKey(status_value) )
@@ -193,9 +193,9 @@ public abstract class EPPDomainBase extends EPPXMLBase
 
             }
 
-            if ( a_node.getNodeName().equals("domain:reDate") ) { trn_data.m_request_date = a_node.getFirstChild().getNodeValue(); }
-            if ( a_node.getNodeName().equals("domain:acDate") ) { trn_data.m_action_date = a_node.getFirstChild().getNodeValue(); }
-            if ( a_node.getNodeName().equals("domain:exDate") ) { trn_data.m_expiration_date = a_node.getFirstChild().getNodeValue(); }
+            if ( a_node.getLocalName().equals("reDate") ) { trn_data.m_request_date = a_node.getFirstChild().getNodeValue(); }
+            if ( a_node.getLocalName().equals("acDate") ) { trn_data.m_action_date = a_node.getFirstChild().getNodeValue(); }
+            if ( a_node.getLocalName().equals("exDate") ) { trn_data.m_expiration_date = a_node.getFirstChild().getNodeValue(); }
 
         }
 

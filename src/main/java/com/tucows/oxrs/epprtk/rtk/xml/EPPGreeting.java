@@ -190,10 +190,10 @@ public class EPPGreeting extends EPPXMLBase implements epp_Hello
             {
                 Node a_node = greeting_nodes.item(count);
     
-                if ( a_node.getNodeName().equals("svID") ) { greeting_.m_server_id = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("svDate") ) { greeting_.m_server_date = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("svcMenu") ) { service_menu = a_node; }
-                if ( a_node.getNodeName().equals("dcp") ) { dcp = a_node; }
+                if ( a_node.getLocalName().equals("svID") ) { greeting_.m_server_id = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("svDate") ) { greeting_.m_server_date = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("svcMenu") ) { service_menu = a_node; }
+                if ( a_node.getLocalName().equals("dcp") ) { dcp = a_node; }
             }
 
             if (service_menu != null)
@@ -211,10 +211,10 @@ public class EPPGreeting extends EPPXMLBase implements epp_Hello
                 {
                     Node a_node = inner_nodes.item(count);
         
-                    if ( a_node.getNodeName().equals("version") ) { version_list.add(a_node.getFirstChild().getNodeValue()); }
-                    if ( a_node.getNodeName().equals("lang") ) { lang_list.add(a_node.getFirstChild().getNodeValue()); }
-                    if ( a_node.getNodeName().equals("svcExtension") ) { service_extension = a_node; }
-                    if ( a_node.getNodeName().equals("objURI") ) { service_list.add(a_node.getFirstChild().getNodeValue()); }
+                    if ( a_node.getLocalName().equals("version") ) { version_list.add(a_node.getFirstChild().getNodeValue()); }
+                    if ( a_node.getLocalName().equals("lang") ) { lang_list.add(a_node.getFirstChild().getNodeValue()); }
+                    if ( a_node.getLocalName().equals("svcExtension") ) { service_extension = a_node; }
+                    if ( a_node.getLocalName().equals("objURI") ) { service_list.add(a_node.getFirstChild().getNodeValue()); }
                 }
                 
                 svc_menu.m_versions = convertListToStringArray(version_list);
@@ -227,7 +227,7 @@ public class EPPGreeting extends EPPXMLBase implements epp_Hello
                     for (int count = 0; count < ext_nodes.getLength(); count++)
                     {
                         Node a_node = ext_nodes.item(count);
-                        if ( a_node.getNodeName().equals("extURI") ) { extension_list.add(a_node.getFirstChild().getNodeValue()); }
+                        if ( a_node.getLocalName().equals("extURI") ) { extension_list.add(a_node.getFirstChild().getNodeValue()); }
                     }
                 }
 
@@ -254,19 +254,19 @@ public class EPPGreeting extends EPPXMLBase implements epp_Hello
 
                     debug(DEBUG_LEVEL_THREE,method_name,"DCP node name: ["+a_node.getNodeName()+"]");
         
-                    if ( a_node.getNodeName().equals("access") )
+                    if ( a_node.getLocalName().equals("access") )
                     { 
-                        String type = a_node.getFirstChild().getNodeName().toLowerCase();
+                        String type = a_node.getFirstChild().getLocalName().toLowerCase();
                         dc_policy.m_access = (epp_dcpAccessType)dcp_access_string_to_type_hash_.get(type);
                     }
-                    if ( a_node.getNodeName().equals("expiry") )
+                    if ( a_node.getLocalName().equals("expiry") )
                     { 
-                        String type = a_node.getFirstChild().getNodeName().toLowerCase();
+                        String type = a_node.getFirstChild().getLocalName().toLowerCase();
                         dc_policy.m_expiry = new epp_dcpExpiry();
                         dc_policy.m_expiry.m_type = (epp_dcpExpiryType)dcp_expiry_string_to_type_hash_.get(type);
                         dc_policy.m_expiry.m_value = a_node.getFirstChild().getNodeValue();
                     }
-                    if ( a_node.getNodeName().equals("statement") )
+                    if ( a_node.getLocalName().equals("statement") )
                     {
                         NodeList s_inner_nodes = a_node.getChildNodes();
                         NodeList purpose_nodes = null;
@@ -277,11 +277,11 @@ public class EPPGreeting extends EPPXMLBase implements epp_Hello
                         for (int i = 0; i < s_inner_nodes.getLength(); i++)
                         {
                             Node s_node = s_inner_nodes.item(i);
-                            if (s_node.getNodeName().equals("purpose")) { purpose_nodes = s_node.getChildNodes(); }
-                            if (s_node.getNodeName().equals("recipient")) { recipients_nodes = s_node.getChildNodes(); }
-                            if (s_node.getNodeName().equals("retention"))
+                            if (s_node.getLocalName().equals("purpose")) { purpose_nodes = s_node.getChildNodes(); }
+                            if (s_node.getLocalName().equals("recipient")) { recipients_nodes = s_node.getChildNodes(); }
+                            if (s_node.getLocalName().equals("retention"))
                             {
-                                String type = s_node.getFirstChild().getNodeName().toLowerCase();
+                                String type = s_node.getFirstChild().getLocalName().toLowerCase();
                                 dcp_statement.m_retention = (epp_dcpRetentionType)dcp_retention_string_to_type_hash_.get(type);
                             }
                         }
@@ -289,7 +289,7 @@ public class EPPGreeting extends EPPXMLBase implements epp_Hello
                         {
                             for (int i = 0; i < purpose_nodes.getLength(); i++)
                             {
-                                String type = purpose_nodes.item(i).getNodeName().toLowerCase();
+                                String type = purpose_nodes.item(i).getLocalName().toLowerCase();
                                 purpose_list.add(dcp_purpose_string_to_type_hash_.get(type));
                             }
                             dcp_statement.m_purposes = (epp_dcpPurposeType[])convertListToArray(epp_dcpPurposeType.class, purpose_list);
@@ -298,7 +298,7 @@ public class EPPGreeting extends EPPXMLBase implements epp_Hello
                         {
                             for (int i = 0; i < recipients_nodes.getLength(); i++)
                             {
-                                String type = recipients_nodes.item(i).getNodeName().toLowerCase();
+                                String type = recipients_nodes.item(i).getLocalName().toLowerCase();
                                 epp_dcpRecipient recip = new epp_dcpRecipient((epp_dcpRecipientType)dcp_recipient_string_to_type_hash_.get(type), null);
                                 recipients_list.add(recip);
                             }

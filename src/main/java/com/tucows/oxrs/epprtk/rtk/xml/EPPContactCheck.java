@@ -199,7 +199,7 @@ public class EPPContactCheck extends EPPContactBase implements epp_ContactCheck
 
             Element response_data_element = getElement(response_node.getChildNodes(), "resData");
 
-            Node contact_check_data_node = response_data_element.getElementsByTagName("contact:chkData").item(0);
+            Node contact_check_data_node = response_data_element.getElementsByTagNameNS("urn:ietf:params:xml:ns:contact-1.0", "chkData").item(0);
 
             action_response_.m_results = parseGenericCheckResults(contact_check_data_node);
 

@@ -193,7 +193,7 @@ public class EPPHostInfo extends EPPHostBase implements epp_HostInfo
 
             Element response_data_element = getElement(response_node.getChildNodes(), "resData");
 
-            NodeList host_info_result_list = response_data_element.getElementsByTagName("host:infData").item(0).getChildNodes();
+            NodeList host_info_result_list = response_data_element.getElementsByTagNameNS("urn:ietf:params:xml:ns:host-1.0", "infData").item(0).getChildNodes();
 
             debug(DEBUG_LEVEL_TWO,method_name,"host:infData's node count ["+host_info_result_list.getLength()+"]");
 
@@ -209,10 +209,10 @@ public class EPPHostInfo extends EPPHostBase implements epp_HostInfo
             {
                 Node a_node = host_info_result_list.item(count);
 
-                if ( a_node.getNodeName().equals("host:name") ) { action_response_.m_name = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("host:roid") ) { action_response_.m_roid = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("name") ) { action_response_.m_name = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("roid") ) { action_response_.m_roid = a_node.getFirstChild().getNodeValue(); }
 
-                if ( a_node.getNodeName().equals("host:addr") )
+                if ( a_node.getLocalName().equals("addr") )
                 {
                     epp_HostAddress address = new epp_HostAddress();
                     address.m_ip = a_node.getFirstChild().getNodeValue();
@@ -227,7 +227,7 @@ public class EPPHostInfo extends EPPHostBase implements epp_HostInfo
                     addresses.add(address);
                 }
 
-                if ( a_node.getNodeName().equals("host:status") )
+                if ( a_node.getLocalName().equals("status") )
                 {
                     epp_HostStatus status = new epp_HostStatus();
                     Node status_value_node = a_node.getFirstChild();
@@ -253,14 +253,14 @@ public class EPPHostInfo extends EPPHostBase implements epp_HostInfo
                     statuses.add(status);
                 }
 
-                if ( a_node.getNodeName().equals("host:clID") ) { action_response_.m_client_id = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("clID") ) { action_response_.m_client_id = a_node.getFirstChild().getNodeValue(); }
 
-                if ( a_node.getNodeName().equals("host:crID") ) { action_response_.m_created_by = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("host:crDate") ) { action_response_.m_created_date = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("host:upID") ) { action_response_.m_updated_by = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("host:upDate") ) { action_response_.m_updated_date = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("crID") ) { action_response_.m_created_by = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("crDate") ) { action_response_.m_created_date = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("upID") ) { action_response_.m_updated_by = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("upDate") ) { action_response_.m_updated_date = a_node.getFirstChild().getNodeValue(); }
 
-                if ( a_node.getNodeName().equals("host:trDate") ) { action_response_.m_transfer_date = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("trDate") ) { action_response_.m_transfer_date = a_node.getFirstChild().getNodeValue(); }
             }
 
             if ( addresses.size() > 0 ) { action_response_.m_addresses = (epp_HostAddress[]) convertListToArray((new epp_HostAddress()).getClass(), addresses); }

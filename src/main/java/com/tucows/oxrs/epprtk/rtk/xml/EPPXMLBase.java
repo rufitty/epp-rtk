@@ -44,6 +44,7 @@ import org.xml.sax.*;
 import org.apache.xerces.dom.*;
 import org.apache.xml.serialize.*;
 
+import org.apache.log4j.Logger;
 import org.apache.regexp.*;
 
 /**
@@ -54,7 +55,7 @@ import org.apache.regexp.*;
 **/
 public abstract class EPPXMLBase extends RTKBase
 {
-
+  
     /**
      * Hashtable to allow for conversion from String transfer status to
      * epp_TransferStatusType.
@@ -168,7 +169,7 @@ public abstract class EPPXMLBase extends RTKBase
                         
                         // getElementsByTagName() is recursive to the children, so we might have
                         // a <value> node which is really under an <extValue> parent.
-                        if ( value_node.getParentNode().getNodeName().equals("extValue") ) {
+                        if ( value_node.getParentNode().getLocalName().equals("extValue") ) {
                             // skip...   leave it to when we process <extValue>'s in the next block
                             break;
                         }
@@ -225,7 +226,7 @@ public abstract class EPPXMLBase extends RTKBase
                                 ext_value = new epp_ExtResultValue();
                             }
                             
-                            if ( a_node.getNodeName().equals("value") )
+                            if ( a_node.getLocalName().equals("value") )
                             {
 
                                 Node value_contents = a_node.getFirstChild();
@@ -254,7 +255,7 @@ public abstract class EPPXMLBase extends RTKBase
 
                                 ext_value.m_value = value;
                             }
-                            if ( a_node.getNodeName().equals("reason") ) 
+                            if ( a_node.getLocalName().equals("reason") ) 
                             {
                                 ext_value.m_reason = a_node.getFirstChild().getNodeValue();
                             }
@@ -403,7 +404,7 @@ public abstract class EPPXMLBase extends RTKBase
         {
             Node a_node = node_list.item(count);
             debug(DEBUG_LEVEL_TWO,method_name,"Node's name ["+a_node.getNodeName()+"]");
-            if ( a_node.getNodeName().equals(node_name) )
+            if ( a_node.getLocalName().equals(node_name) )
             {
                 debug(DEBUG_LEVEL_TWO,method_name,"Found desired_node node");
                 desired_node = a_node;
@@ -698,7 +699,7 @@ public abstract class EPPXMLBase extends RTKBase
 	for (int count = 0; count < check_result_list.getLength(); count++)
 	{
 	    Node a_node = check_result_list.item(count);
-	    if (! a_node.getNodeName().endsWith(":cd")) continue;
+	    if (! a_node.getLocalName().equals("cd")) continue;
 
 	    NodeList one_check_list = a_node.getChildNodes();
 	    if (one_check_list.getLength() == 0)
@@ -710,14 +711,14 @@ public abstract class EPPXMLBase extends RTKBase
 	    for (int i = 0; i < one_check_list.getLength(); i++)
 	    {
 		Node the_node = one_check_list.item(i);
-		if (the_node.getNodeName().endsWith(":name") ||
-		    the_node.getNodeName().endsWith(":id"))
+		if (the_node.getLocalName().equals("name") ||
+		    the_node.getLocalName().equals("id"))
 		{
 		    chk_result.m_value = the_node.getFirstChild().getNodeValue();
 		    String availValue = ((Element)the_node).getAttribute("avail");
 		    chk_result.m_avail = (availValue.equals("1") || availValue.equals("true")) ? true : false;
 		}
-		if (the_node.getNodeName().endsWith(":reason"))
+		if (the_node.getLocalName().equals("reason"))
 		{
 		    chk_result.m_reason = the_node.getFirstChild().getNodeValue();
 		    chk_result.m_lang = ((Element)the_node).getAttribute("lang");
@@ -797,7 +798,7 @@ public abstract class EPPXMLBase extends RTKBase
         parser.setFeature("http://apache.org/xml/features/continue-after-fatal-error", false);
         parser.setFeature("http://apache.org/xml/features/dom/include-ignorable-whitespace", false);
 
-        parser.parse(new InputSource(new ByteArrayInputStream(extension_string.getBytes("utf-8"))));
+        parser.parse(new InputSource(new StringReader(extension_string)));
         Document document = parser.getDocument();
 
         if (!document.isSupported("Traversal", "2.0")) throw new RuntimeException("This DOM Document does not support Traversal");
@@ -825,6 +826,7 @@ public abstract class EPPXMLBase extends RTKBase
                 epp_Extension extension = extensions[count];
                 
                 String extension_string = extension.toXML();
+                
                 if ( extension_string != null &&
                      extension_string.length() != 0 )
                 {

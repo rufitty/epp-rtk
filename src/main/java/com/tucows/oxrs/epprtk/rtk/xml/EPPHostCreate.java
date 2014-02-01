@@ -209,7 +209,7 @@ public class EPPHostCreate extends EPPHostBase implements epp_HostCreate
                 throw new epp_XMLException("response is missing the resData element");
             }
 
-            NodeList host_create_data_list = response_data_element.getElementsByTagName("host:creData").item(0).getChildNodes();
+            NodeList host_create_data_list = response_data_element.getElementsByTagNameNS("urn:ietf:params:xml:ns:host-1.0", "creData").item(0).getChildNodes();
 
             debug(DEBUG_LEVEL_TWO,method_name,"host:creData's node count ["+host_create_data_list.getLength()+"]");
 
@@ -223,8 +223,8 @@ public class EPPHostCreate extends EPPHostBase implements epp_HostCreate
             {
                 Node a_node = host_create_data_list.item(count);
 
-                if ( a_node.getNodeName().equals("host:name") ) { action_response_.m_name = a_node.getFirstChild().getNodeValue(); }
-                if ( a_node.getNodeName().equals("host:crDate") ) { action_response_.m_creation_date = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("name") ) { action_response_.m_name = a_node.getFirstChild().getNodeValue(); }
+                if ( a_node.getLocalName().equals("crDate") ) { action_response_.m_creation_date = a_node.getFirstChild().getNodeValue(); }
             }
         }
         catch (SAXException xcp)

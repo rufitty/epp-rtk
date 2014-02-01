@@ -200,7 +200,7 @@ public class EPPDomainCheck extends EPPDomainBase implements epp_DomainCheck
             Element response_data_element = getElement(response_node.getChildNodes(), "resData");
             
             if(response_data_element != null) {
-                Node domain_check_data_node = response_data_element.getElementsByTagName("domain:chkData").item(0);
+                Node domain_check_data_node = response_data_element.getElementsByTagNameNS("urn:ietf:params:xml:ns:domain-1.0", "chkData").item(0);
     
                 action_response_.m_results = parseGenericCheckResults(domain_check_data_node);
             }
