@@ -303,6 +303,7 @@ public class EPPContactUpdate extends EPPContactBase implements epp_ContactUpdat
                         if ( type.getType() != null ) { typeElem.setAttribute("type", type.getType()); }
                     }
                 }
+                change_element.appendChild(disclose_element);
             }
 
         }
