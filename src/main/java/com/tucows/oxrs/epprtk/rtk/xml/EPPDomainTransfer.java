@@ -205,7 +205,7 @@ public class EPPDomainTransfer extends EPPDomainBase implements epp_DomainTransf
         try
         {
             Element epp_node = getDocumentElement();
-            Node response_node = epp_node.getElementsByTagName("response").item(0);
+            Node response_node = epp_node.getElementsByTagNameNS(EPP_NS, "response").item(0);
 
             if ( response_node == null )
             {
@@ -223,7 +223,7 @@ public class EPPDomainTransfer extends EPPDomainBase implements epp_DomainTransf
 
             Element response_data_element = getElement(response_node.getChildNodes(), "resData");
 
-            NodeList domain_transfer_data_list = response_data_element.getElementsByTagNameNS("urn:ietf:params:xml:ns:domain-1.0", "trnData").item(0).getChildNodes();
+            NodeList domain_transfer_data_list = response_data_element.getElementsByTagNameNS(EPP_DOMAIN_NS, "trnData").item(0).getChildNodes();
 
             debug(DEBUG_LEVEL_TWO,method_name,"domain:trnData's node count ["+domain_transfer_data_list.getLength()+"]");
 

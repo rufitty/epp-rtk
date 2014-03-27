@@ -183,7 +183,7 @@ public class EPPDomainRenew extends EPPDomainBase implements epp_DomainRenew
         try
         {
             Element epp_node = getDocumentElement();
-            Node response_node = epp_node.getElementsByTagName("response").item(0);
+            Node response_node = epp_node.getElementsByTagNameNS(EPP_NS, "response").item(0);
 
             if ( response_node == null )
             {
@@ -201,7 +201,7 @@ public class EPPDomainRenew extends EPPDomainBase implements epp_DomainRenew
 
             Element response_data_element = getElement(response_node.getChildNodes(), "resData");
 
-            NodeList domain_renew_data_list = response_data_element.getElementsByTagNameNS("urn:ietf:params:xml:ns:domain-1.0", "renData").item(0).getChildNodes();
+            NodeList domain_renew_data_list = response_data_element.getElementsByTagNameNS(EPP_DOMAIN_NS, "renData").item(0).getChildNodes();
 
             debug(DEBUG_LEVEL_TWO,method_name,"domain:renData's node count ["+domain_renew_data_list.getLength()+"]");
 

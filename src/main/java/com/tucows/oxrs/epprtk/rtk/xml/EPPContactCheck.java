@@ -181,7 +181,7 @@ public class EPPContactCheck extends EPPContactBase implements epp_ContactCheck
         try
         {
             Element epp_node = getDocumentElement();
-            Node response_node = epp_node.getElementsByTagName("response").item(0);
+            Node response_node = epp_node.getElementsByTagNameNS(EPP_NS, "response").item(0);
 
             if ( response_node == null )
             {
@@ -199,7 +199,7 @@ public class EPPContactCheck extends EPPContactBase implements epp_ContactCheck
 
             Element response_data_element = getElement(response_node.getChildNodes(), "resData");
 
-            Node contact_check_data_node = response_data_element.getElementsByTagNameNS("urn:ietf:params:xml:ns:contact-1.0", "chkData").item(0);
+            Node contact_check_data_node = response_data_element.getElementsByTagNameNS(EPP_CONTACT_NS, "chkData").item(0);
 
             action_response_.m_results = parseGenericCheckResults(contact_check_data_node);
 

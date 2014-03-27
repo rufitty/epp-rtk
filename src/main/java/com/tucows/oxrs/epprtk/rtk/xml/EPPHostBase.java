@@ -44,6 +44,7 @@ import org.w3c.dom.Element;
 public abstract class EPPHostBase extends EPPXMLBase
 {
 
+    public static final String EPP_HOST_NS = "urn:ietf:params:xml:ns:host-1.0";
     /**
      * Hashtable to allow for conversion from String host status to
      * epp_HostStatusType.
@@ -110,8 +111,8 @@ public abstract class EPPHostBase extends EPPXMLBase
      */
     protected void setCommonAttributes(Element command)
     {
-        command.setAttribute("xmlns:host", "urn:ietf:params:xml:ns:host-1.0");
-        command.setAttribute("xsi:schemaLocation", "urn:ietf:params:xml:ns:host-1.0 host-1.0.xsd");
+        command.setAttribute("xmlns:host", EPP_HOST_NS);
+        command.setAttribute("xsi:schemaLocation", EPP_HOST_NS + " host-1.0.xsd");
     }
 
     /**

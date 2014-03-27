@@ -177,7 +177,7 @@ public class EPPDomainDelete extends EPPDomainBase implements epp_DomainDelete
         try
         {
             Element epp_node = getDocumentElement();
-            Node response_node = epp_node.getElementsByTagName("response").item(0);
+            Node response_node = epp_node.getElementsByTagNameNS(EPP_NS, "response").item(0);
 
             if ( response_node == null )
             {

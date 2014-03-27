@@ -181,7 +181,7 @@ public class EPPDomainCheck extends EPPDomainBase implements epp_DomainCheck
         try
         {
             Element epp_node = getDocumentElement();
-            Node response_node = epp_node.getElementsByTagName("response").item(0);
+            Node response_node = epp_node.getElementsByTagNameNS(EPP_NS, "response").item(0);
 
             if ( response_node == null )
             {
@@ -200,7 +200,7 @@ public class EPPDomainCheck extends EPPDomainBase implements epp_DomainCheck
             Element response_data_element = getElement(response_node.getChildNodes(), "resData");
             
             if(response_data_element != null) {
-                Node domain_check_data_node = response_data_element.getElementsByTagNameNS("urn:ietf:params:xml:ns:domain-1.0", "chkData").item(0);
+                Node domain_check_data_node = response_data_element.getElementsByTagNameNS(EPP_DOMAIN_NS, "chkData").item(0);
     
                 action_response_.m_results = parseGenericCheckResults(domain_check_data_node);
             }

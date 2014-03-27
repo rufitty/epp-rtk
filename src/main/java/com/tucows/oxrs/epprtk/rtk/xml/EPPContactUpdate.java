@@ -290,7 +290,6 @@ public class EPPContactUpdate extends EPPContactBase implements epp_ContactUpdat
             {
                 change_element.appendChild( prepareAuthInfo( doc, "contact", change.m_auth_info ) );
             }
-            
         }
         
         debug(DEBUG_LEVEL_THREE,method_name,"Leaving");
@@ -315,7 +314,7 @@ public class EPPContactUpdate extends EPPContactBase implements epp_ContactUpdat
         try
         {
             Element epp_node = getDocumentElement();
-            Node response_node = epp_node.getElementsByTagName("response").item(0);
+            Node response_node = epp_node.getElementsByTagNameNS(EPP_NS, "response").item(0);
 
             if ( response_node == null )
             {

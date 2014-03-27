@@ -35,6 +35,7 @@ import java.text.*;
 
 import com.tucows.oxrs.epprtk.rtk.*;
 import org.openrtk.idl.epprtk.*;
+import org.openrtk.idl.epprtk.contact.epp_ContactDisclose;
 import org.openrtk.idl.epprtk.domain.*;
 import org.openrtk.idl.epprtk.host.epp_HostAddress;
 import org.openrtk.idl.epprtk.host.epp_HostAddressType;
@@ -187,7 +188,7 @@ public class EPPDomainInfo extends EPPDomainBase implements epp_DomainInfo
         try
         {
             Element epp_node = getDocumentElement();
-            Node response_node = epp_node.getElementsByTagName("response").item(0);
+            Node response_node = epp_node.getElementsByTagNameNS(EPP_NS, "response").item(0);
 
             if ( response_node == null )
             {
@@ -205,7 +206,7 @@ public class EPPDomainInfo extends EPPDomainBase implements epp_DomainInfo
 
             Element response_data_element = getElement(response_node.getChildNodes(), "resData");
 
-            NodeList domain_info_result_list = response_data_element.getElementsByTagNameNS("urn:ietf:params:xml:ns:domain-1.0", "infData").item(0).getChildNodes();
+            NodeList domain_info_result_list = response_data_element.getElementsByTagNameNS(EPP_DOMAIN_NS, "infData").item(0).getChildNodes();
 
             debug(DEBUG_LEVEL_TWO,method_name,"domain:infData's node count ["+domain_info_result_list.getLength()+"]");
 

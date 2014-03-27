@@ -180,7 +180,7 @@ public class EPPContactInfo extends EPPContactBase implements epp_ContactInfo
         try
         {
             Element epp_node = getDocumentElement();
-            Node response_node = epp_node.getElementsByTagName("response").item(0);
+            Node response_node = epp_node.getElementsByTagNameNS(EPP_NS, "response").item(0);
 
             if ( response_node == null )
             {
@@ -198,7 +198,7 @@ public class EPPContactInfo extends EPPContactBase implements epp_ContactInfo
 
             Element response_data_element = getElement(response_node.getChildNodes(), "resData");
 
-            NodeList contact_info_result_list = response_data_element.getElementsByTagNameNS("urn:ietf:params:xml:ns:contact-1.0", "infData").item(0).getChildNodes();
+            NodeList contact_info_result_list = response_data_element.getElementsByTagNameNS(EPP_CONTACT_NS, "infData").item(0).getChildNodes();
 
             debug(DEBUG_LEVEL_TWO,method_name,"contact:infData's node count ["+contact_info_result_list.getLength()+"]");
 

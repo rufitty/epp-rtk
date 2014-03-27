@@ -856,9 +856,9 @@ public class EPPClient extends RTKBase implements epp_Session
 	else
 	{
             String[] services = new String[3];
-            services[0] = "urn:ietf:params:xml:ns:contact-1.0";
-            services[1] = "urn:ietf:params:xml:ns:domain-1.0";
-            services[2] = "urn:ietf:params:xml:ns:host-1.0";
+            services[0] = EPPContactBase.EPP_CONTACT_NS;
+            services[1] = EPPDomainBase.EPP_DOMAIN_NS;
+            services[2] = EPPHostBase.EPP_HOST_NS;
             login_req.setServices( services );
 	}
         

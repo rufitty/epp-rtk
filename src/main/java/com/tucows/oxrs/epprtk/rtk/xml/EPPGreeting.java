@@ -176,7 +176,7 @@ public class EPPGreeting extends EPPXMLBase implements epp_Hello
             greeting_ = new epp_Greeting();
             
             Element epp_node = getDocumentElement();
-            NodeList greeting_nodes = epp_node.getElementsByTagName("greeting").item(0).getChildNodes();
+            NodeList greeting_nodes = epp_node.getElementsByTagNameNS(EPP_NS, "greeting").item(0).getChildNodes();
 
             if ( greeting_nodes == null || greeting_nodes.getLength() == 0 )
             {

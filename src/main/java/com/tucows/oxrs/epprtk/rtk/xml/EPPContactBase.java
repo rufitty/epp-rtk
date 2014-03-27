@@ -48,6 +48,7 @@ import org.w3c.dom.*;
 public abstract class EPPContactBase extends EPPXMLBase
 {
 
+   public static final String EPP_CONTACT_NS = "urn:ietf:params:xml:ns:contact-1.0";
     /**
      * Hashtable to allow for conversion from String contact status to
      * epp_ContactStatusType.
@@ -114,8 +115,8 @@ public abstract class EPPContactBase extends EPPXMLBase
      */
     protected void setCommonAttributes(Element command)
     {
-        command.setAttribute("xmlns:contact", "urn:ietf:params:xml:ns:contact-1.0");
-        command.setAttribute("xsi:schemaLocation", "urn:ietf:params:xml:ns:contact-1.0 contact-1.0.xsd");
+        command.setAttribute("xmlns:contact", EPP_CONTACT_NS);
+        command.setAttribute("xsi:schemaLocation", EPP_CONTACT_NS + " contact-1.0.xsd");
     }
 
     /**

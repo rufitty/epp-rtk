@@ -36,6 +36,8 @@ import javax.xml.XMLConstants;
 
 import com.tucows.oxrs.epprtk.rtk.RTKBase;
 import org.openrtk.idl.epprtk.*;
+import org.openrtk.idl.epprtk.contact.epp_ContactDisclose;
+import org.openrtk.idl.epprtk.contact.epp_ContactDiscloseType;
 
 import org.w3c.dom.*;
 import org.w3c.dom.traversal.*;
@@ -55,7 +57,7 @@ import org.apache.regexp.*;
 **/
 public abstract class EPPXMLBase extends RTKBase
 {
-  
+    public static final String EPP_NS = "urn:ietf:params:xml:ns:epp-1.0";
     /**
      * Hashtable to allow for conversion from String transfer status to
      * epp_TransferStatusType.
@@ -140,7 +142,7 @@ public abstract class EPPXMLBase extends RTKBase
 
         epp_Response generic_response = new epp_Response();
 
-        NodeList result_nodes = ((Element)response_node).getElementsByTagName("result");
+        NodeList result_nodes = ((Element)response_node).getElementsByTagNameNS(EPP_NS, "result");
 
         List results = (List)new ArrayList();
 
@@ -153,11 +155,11 @@ public abstract class EPPXMLBase extends RTKBase
                 epp_Result result = new epp_Result();
                 result.m_code = Short.parseShort(an_element.getAttribute("code"));
 
-                Node msg_node = an_element.getElementsByTagName("msg").item(0);
+                Node msg_node = an_element.getElementsByTagNameNS(EPP_NS, "msg").item(0);
                 result.m_lang = ((Element)msg_node).getAttribute("lang");
                 result.m_msg = msg_node.getFirstChild().getNodeValue();
 
-                NodeList value_nodes = an_element.getElementsByTagName("value");
+                NodeList value_nodes = an_element.getElementsByTagNameNS(EPP_NS, "value");
 
                 List values = (List)new ArrayList();
 
@@ -204,7 +206,7 @@ public abstract class EPPXMLBase extends RTKBase
 
                 }
 
-                NodeList ext_value_nodes = an_element.getElementsByTagName("extValue");
+                NodeList ext_value_nodes = an_element.getElementsByTagNameNS(EPP_NS, "extValue");
 
                 List ext_values = (List)new ArrayList();
 
@@ -286,7 +288,7 @@ public abstract class EPPXMLBase extends RTKBase
         // we give directly back to the user for external parsing
         // (which might be provided by RTK classes if the extension
         // is common
-        NodeList extension_nodes = ((Element)response_node).getElementsByTagName("extension");
+        NodeList extension_nodes = ((Element)response_node).getElementsByTagNameNS(EPP_NS, "extension");
 
         if ( extension_nodes.getLength() == 0 )
         {
@@ -346,7 +348,7 @@ public abstract class EPPXMLBase extends RTKBase
 
         }
 
-        NodeList trans_id_nodes = ((Element)response_node).getElementsByTagName("trID");
+        NodeList trans_id_nodes = ((Element)response_node).getElementsByTagNameNS(EPP_NS, "trID");
         if ( trans_id_nodes.getLength() == 0 )
         {
             throw new epp_XMLException("missing result trans id");
@@ -354,7 +356,7 @@ public abstract class EPPXMLBase extends RTKBase
         Node trans_id_node = trans_id_nodes.item(0);
         generic_response.m_trans_id = getTransID(trans_id_node);
 	
-        NodeList msg_queue_nodes = ((Element)response_node).getElementsByTagName("msgQ");
+        NodeList msg_queue_nodes = ((Element)response_node).getElementsByTagNameNS(EPP_NS, "msgQ");
 	
 	if ( msg_queue_nodes.getLength() > 0 )
         {
@@ -364,10 +366,10 @@ public abstract class EPPXMLBase extends RTKBase
 	    msg_queue.m_count = Integer.parseInt(msg_queue_element.getAttribute("count"));
             msg_queue.m_id = msg_queue_element.getAttribute("id");
 	    
-	    NodeList queue_date_nodes = msg_queue_element.getElementsByTagName("qDate");
+	    NodeList queue_date_nodes = msg_queue_element.getElementsByTagNameNS(EPP_NS, "qDate");
 	    if ( queue_date_nodes.getLength() > 0 ) { msg_queue.m_queue_date = queue_date_nodes.item(0).getFirstChild().getNodeValue(); }
             
-	    NodeList the_msg_nodes = msg_queue_element.getElementsByTagName("msg");
+	    NodeList the_msg_nodes = msg_queue_element.getElementsByTagNameNS(EPP_NS, "msg");
 	    if ( the_msg_nodes.getLength() > 0 )
             {
                 Element msg_element = (Element)the_msg_nodes.item(0);
@@ -494,9 +496,9 @@ public abstract class EPPXMLBase extends RTKBase
         debug(DEBUG_LEVEL_THREE,method_name,"Entered");
 
         Element root = doc.createElement("epp");
-        root.setAttribute("xmlns", "urn:ietf:params:xml:ns:epp-1.0");
+        root.setAttribute("xmlns", EPP_NS);
         root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        root.setAttribute("xsi:schemaLocation", "urn:ietf:params:xml:ns:epp-1.0 epp-1.0.xsd");
+        root.setAttribute("xsi:schemaLocation", EPP_NS + " epp-1.0.xsd");
 
         debug(DEBUG_LEVEL_THREE,method_name,"Leaving");
         return root;

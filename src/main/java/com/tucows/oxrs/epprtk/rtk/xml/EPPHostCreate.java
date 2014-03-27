@@ -187,7 +187,7 @@ public class EPPHostCreate extends EPPHostBase implements epp_HostCreate
         try
         {
             Element epp_node = getDocumentElement();
-            Node response_node = epp_node.getElementsByTagName("response").item(0);
+            Node response_node = epp_node.getElementsByTagNameNS(EPP_NS, "response").item(0);
 
             if ( response_node == null )
             {
@@ -209,7 +209,7 @@ public class EPPHostCreate extends EPPHostBase implements epp_HostCreate
                 throw new epp_XMLException("response is missing the resData element");
             }
 
-            NodeList host_create_data_list = response_data_element.getElementsByTagNameNS("urn:ietf:params:xml:ns:host-1.0", "creData").item(0).getChildNodes();
+            NodeList host_create_data_list = response_data_element.getElementsByTagNameNS(EPP_HOST_NS, "creData").item(0).getChildNodes();
 
             debug(DEBUG_LEVEL_TWO,method_name,"host:creData's node count ["+host_create_data_list.getLength()+"]");
 

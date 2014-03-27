@@ -50,6 +50,7 @@ import org.w3c.dom.Node;
 public abstract class EPPDomainBase extends EPPXMLBase
 {
 
+    public static final String EPP_DOMAIN_NS = "urn:ietf:params:xml:ns:domain-1.0";
     /**
      * Hashtable to allow for conversion from String domain status to
      * epp_DomainStatusType.
@@ -121,8 +122,8 @@ public abstract class EPPDomainBase extends EPPXMLBase
      */
     protected void setCommonAttributes(Element command)
     {
-        command.setAttribute("xmlns:domain", "urn:ietf:params:xml:ns:domain-1.0");
-        command.setAttribute("xsi:schemaLocation", "urn:ietf:params:xml:ns:domain-1.0 domain-1.0.xsd");
+        command.setAttribute("xmlns:domain", EPP_DOMAIN_NS);
+        command.setAttribute("xsi:schemaLocation", EPP_DOMAIN_NS + " domain-1.0.xsd");
     }
 
     protected Element createNameServerElement(Document doc, List nameServers)
