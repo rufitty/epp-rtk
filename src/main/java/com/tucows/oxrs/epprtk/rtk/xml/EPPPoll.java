@@ -211,14 +211,25 @@ public class EPPPoll extends EPPXMLBase implements epp_Poll
                 {
                     Node a_node = poll_resData_nodelist.item(count);
 
-                    String a_node_name = a_node.getNodeName();
+                    String localName = a_node.getLocalName();
+                    String prefix;
+                    String namespace = a_node.getNamespaceURI();
+                    if(EPPDomainBase.EPP_DOMAIN_NS.equals(namespace)) {
+                      prefix = "domain";
+                    } else if(EPPContactBase.EPP_CONTACT_NS.equals(namespace)) {
+                      prefix = "contact";
+                    } else if(EPPHostBase.EPP_HOST_NS.equals(namespace)) {
+                      prefix = "host";
+                    } else {
+                      prefix = a_node.getPrefix();
+                    }
 
                     // ignore verisign lowbalance-poll messages. EPP-RTK has no concept of
                     // how to deal with this.
                     if (a_node.getNodeName().equals("lowbalance-poll:pollData"))
                         break;
 
-                    debug(DEBUG_LEVEL_TWO,method_name,"poll resData node name ["+a_node_name+"]");
+                    debug(DEBUG_LEVEL_TWO,method_name,"poll resData node name ["+ prefix + ":" + localName +"]");
 
                     // search through poll extension package names
 
@@ -226,7 +237,7 @@ public class EPPPoll extends EPPXMLBase implements epp_Poll
                     // first, let's strip out the non-word characters (i.e.
                     // only [a-zA-Z0-9_] will be left behind.)
                     RE regexp = new RE("\\W");
-                    String class_name = regexp.subst(a_node_name, "");
+                    String class_name = regexp.subst(prefix + localName, "");
 
                     String poll_extension_package_name = "com.tucows.oxrs.epprtk.rtk.xml.poll";
 
@@ -271,7 +282,7 @@ public class EPPPoll extends EPPXMLBase implements epp_Poll
 
                     if ( poll_res_data == null )
                     {
-                        throw new epp_XMLException("Unrecognized Poll resData ["+a_node_name+"]");
+                        throw new epp_XMLException("Unrecognized Poll resData ["+ prefix + ":" + localName +"]");
                     }               
 
                     poll_res_data.fromXML(a_node);
