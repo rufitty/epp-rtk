@@ -146,6 +146,13 @@ public class epp_ContactInfoRsp implements org.omg.CORBA.portable.IDLEntity
    * @see #getAuthInfo()
    */
   public org.openrtk.idl.epprtk.epp_AuthInfo m_auth_info = null;
+  /**
+   * The disclose information associated with the domain object.
+   * @see #setDisclose(org.openrtk.idl.epprtk.contact.epp_ContactDisclose)
+   * @see #getDisclose()
+   */
+  public org.openrtk.idl.epprtk.contact.epp_ContactDisclose m_disclose = null;
+
 
   /**
    * Empty constructor
@@ -462,6 +469,19 @@ public class epp_ContactInfoRsp implements org.omg.CORBA.portable.IDLEntity
    * @see #m_auth_info
    */
   public org.openrtk.idl.epprtk.epp_AuthInfo getAuthInfo() { return m_auth_info; }
+
+  /**
+   * Accessor method for the disclose information associated with the domain object
+   * @param value The domain authorization information
+   * @see #m_disclose
+   */
+  public void setDisclose(org.openrtk.idl.epprtk.contact.epp_ContactDisclose value) { m_disclose = value; }
+  /**
+   * Accessor method for the disclose information associated with the domain object
+   * @return The domain authorization information
+   * @see #m_disclose
+   */
+  public org.openrtk.idl.epprtk.contact.epp_ContactDisclose getDisclose() { return m_disclose; }
 
   /**
    * Converts this class into a string.

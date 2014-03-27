@@ -90,6 +90,13 @@ public class epp_ContactUpdateChange implements org.omg.CORBA.portable.IDLEntity
   public org.openrtk.idl.epprtk.epp_AuthInfo m_auth_info = null;
 
   /**
+   * The disclose information to be associated with the contact object.
+   * @see #setDisclose(org.openrtk.idl.epprtk.contact.epp_ContactDisclose)
+   * @see #getDisclose()
+   */
+  public org.openrtk.idl.epprtk.contact.epp_ContactDisclose m_disclose = null;
+
+  /**
    * Empty constructor
    */
   public epp_ContactUpdateChange ()
@@ -234,6 +241,19 @@ public class epp_ContactUpdateChange implements org.omg.CORBA.portable.IDLEntity
    * @see #m_auth_info
    */
   public org.openrtk.idl.epprtk.epp_AuthInfo getAuthInfo() { return m_auth_info; }
+
+  /**
+   * Accessor method for the disclose information to be associated with the contact object
+   * @param value The contact auth info
+   * @see #m_auth_info
+   */
+  public void setDisclose(org.openrtk.idl.epprtk.contact.epp_ContactDisclose value) { m_disclose = value; }
+  /**
+   * Accessor method for the disclose information to be associated with the contact object
+   * @return The contact auth info
+   * @see #m_auth_info
+   */
+  public org.openrtk.idl.epprtk.contact.epp_ContactDisclose getDisclose() { return m_disclose; }
 
   /**
    * Converts this class into a string.

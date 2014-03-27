@@ -303,6 +303,32 @@ public class EPPContactInfo extends EPPContactBase implements epp_ContactInfo
                     action_response_.m_auth_info.m_type = (epp_AuthInfoType)auth_type_string_to_type_hash_.get( ((Element)auth_info_child).getLocalName() );
                     action_response_.m_auth_info.m_roid = ((Element)auth_info_child).getAttribute("roid");
                 }
+
+                if ( a_node.getLocalName().equals("disclose") )
+                {
+                    action_response_.m_disclose = new epp_ContactDisclose();
+                    String flagStr = a_node.getAttributes().getNamedItem("flag").getNodeValue();
+                    boolean flag = "1".endsWith(flagStr) || "true".endsWith(flagStr);
+                    action_response_.m_disclose.m_flag = flag;
+                    if(a_node.hasChildNodes()) {
+                        NodeList discloseList = a_node.getChildNodes();
+                        epp_ContactDiscloseType[] discloseTypes = new epp_ContactDiscloseType[discloseList.getLength()];
+                        for(int i = 0; i < discloseList.getLength(); i++) {
+                            Node discloseItem = discloseList.item(i);
+                            String discloseName = discloseItem.getLocalName().toUpperCase();
+                            NamedNodeMap dicsloseAttributes = discloseItem.getAttributes();
+                            Node type = dicsloseAttributes.getNamedItem("type");
+                            if(type != null) {
+                                discloseTypes[i] = epp_ContactDiscloseType.valueOf(discloseName + "_" + type.getNodeValue().toUpperCase());
+                            } else {
+                                discloseTypes[i] = epp_ContactDiscloseType.valueOf(discloseName);
+                            }
+                        }
+                        action_response_.m_disclose.m_typeList = discloseTypes;
+                    } else {
+                        action_response_.m_disclose.m_typeList = new epp_ContactDiscloseType[0];
+                    }
+                }
             }
 
             if ( addresses.size() > 0 ) { action_response_.m_addresses = (epp_ContactNameAddress[]) convertListToArray((new epp_ContactNameAddress()).getClass(), addresses); }

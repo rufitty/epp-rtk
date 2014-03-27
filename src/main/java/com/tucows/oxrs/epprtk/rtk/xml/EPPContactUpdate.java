@@ -290,6 +290,21 @@ public class EPPContactUpdate extends EPPContactBase implements epp_ContactUpdat
             {
                 change_element.appendChild( prepareAuthInfo( doc, "contact", change.m_auth_info ) );
             }
+
+            if ( change.m_disclose != null )
+            {
+                Element disclose_element = doc.createElement("contact:disclose");
+
+                disclose_element.setAttribute("flag", change.m_disclose.getFlag() ? "1" : "0");
+                List<epp_ContactDiscloseType> discloseList = Arrays.asList(change.m_disclose.getTypeList());
+                for(epp_ContactDiscloseType type: epp_ContactDiscloseType.values()) {
+                    if(discloseList.contains(type)) {
+                        Element typeElem = addXMLElement(doc, disclose_element, "contact:" + type.getName(), "");
+                        if ( type.getType() != null ) { typeElem.setAttribute("type", type.getType()); }
+                    }
+                }
+            }
+
         }
         
         debug(DEBUG_LEVEL_THREE,method_name,"Leaving");
